@@ -3,7 +3,7 @@
 # 
 
 
-FROM php:7.2-fpm-alpine
+FROM php:7.0-fpm-alpine
 
 MAINTAINER Nugroho Andi Hastanto <slemania@gmail.com>
 
