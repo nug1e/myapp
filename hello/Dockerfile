@@ -43,10 +43,7 @@ RUN apk update && \
         libwebp-dev \
         libssh2-dev \
         libjpeg-turbo-dev \
-        icu-dev \
-        ldb-dev \
-        libldap \
-        openldap-dev
+        icu-dev
 
 RUN docker-php-ext-configure hash && \
     docker-php-ext-configure gd \
@@ -58,10 +55,8 @@ RUN docker-php-ext-configure hash && \
         --with-freetype-dir=/usr/include/freetype2 && \
     docker-php-ext-install gd && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install intl && \
-    docker-php-ext-configure ldap && \
-    docker-php-ext-install ldap
-
+    docker-php-ext-install intl
+    
 # Install bcmath, mbstring and zip extensions
 RUN docker-php-ext-install bcmath mbstring zip wddx shmop sockets
 
