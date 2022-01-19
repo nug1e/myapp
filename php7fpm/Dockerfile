@@ -10,7 +10,7 @@ RUN apk update \
     php7-pdo_mysql \
     php7-gettext php7-xmlreader php7-xmlrpc \
     php7-bz2 php7-iconv php7-pdo_dblib php7-curl php7-ctype \
-    php7-libpng php7-libjpeg-turbo libpng-dev \
+    libjpeg libjpeg-turbo libpng libpng-dev \
     supervisor
 
 COPY nginx.conf /etc/nginx/nginx.conf
