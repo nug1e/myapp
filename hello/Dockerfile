@@ -42,7 +42,8 @@ RUN apk update && \
         libxml2-dev \
         libwebp-dev \
         libssh2-dev \
-        libjpeg-turbo-dev
+        libjpeg-turbo-dev \
+        icu-dev
 
 RUN docker-php-ext-configure hash && \
     docker-php-ext-configure gd \
