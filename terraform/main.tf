@@ -1,6 +1,6 @@
 provider "aws" {
-  version = "~> 2.61" 
-  region     = "eu-west-1"
+  version = "~> 3.72.0" 
+  region     = "ap-south-1"
 }
 
 # Will we store our state in S3, and lock with dynamodb
@@ -19,13 +19,13 @@ provider "aws" {
 # VARIABLE
 
 variable "tag" {
-  default = "hello-terra-bkr"
+  default = "hello-terra"
 }
 variable "owner" {
-  default = "gregbkr"
+  default = "nug1e"
 } 
 variable "repo" {
-  default = "myapp-eks"
+  default = "myapp"
 }
 variable "gitHubToken" {
   default = "to-set-via-env-variable"
