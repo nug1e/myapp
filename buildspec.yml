@@ -2,9 +2,9 @@ version: 0.2
 
 env:
   variables:
-    AWS_ACCOUNT_ID: 391378411314 
-    IMAGE_REPO_NAME: hello-protos
-    EKS_CLUSTER: hello-protos
+    AWS_ACCOUNT_ID: 500992923405 
+    IMAGE_REPO_NAME: hello-nugie
+    EKS_CLUSTER: hello-nugie
 
 phases: 
   install: 

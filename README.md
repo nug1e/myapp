@@ -28,7 +28,7 @@ A simple `git push` from a developer in Github will launch the whole CI/CD proce
 
 ### Prerequisites
 Please setup on your laptop:
-- AWS cli and AWS account to deploy in `eu-west-1`
+- AWS cli and AWS account to deploy in `ap-south-1`
 - Docker and Compose
 - Github personal token with `admin:repo_hook, repo` rights from [here](https://github.com/settings/tokens)
 
@@ -44,7 +44,7 @@ curl localhost 8080
 - Set a unique project prefix and your github token:
 ```
 cd terraform
-export TAG=hello-protos   <-- please change to your prefix!
+export TAG=hello-nugie   <-- please change to your prefix!
 export GITHUBTOKEN=xxxx   <-- You token here
 nano buildspec-eks.yml    <-- edit build vars
 ```
