@@ -57,43 +57,6 @@ RUN docker-php-ext-configure hash && \
     docker-php-ext-configure intl && \
     docker-php-ext-install intl
 
-# Install bcmath, mbstring and zip extensions
-RUN docker-php-ext-install bcmath mbstring zip wddx shmop sockets
-
-# curl extension
-RUN docker-php-ext-install curl
-
-# ssh2 module
-RUN pecl install ssh2-1.0 && \
-    docker-php-ext-enable ssh2
-
-RUN export CFLAGS="-I/usr/src/php" && \
-    docker-php-ext-install xmlreader xmlwriter pdo_sqlite
-
-RUN docker-php-ext-install \
-    dom \
-    bz2 \
-    json \
-    iconv \
-    pcntl \
-    phar \
-    posix \
-    simplexml \
-    soap \
-    xml \
-    xmlrpc \
-    xsl \
-    calendar \
-    session \
-    ctype \
-    fileinfo \
-    ftp \
-    sysvmsg \
-    sysvsem \
-    sysvshm    
-
-
-
 #
 # --------------------------------------------------------------------------
 # Compile Nginx
