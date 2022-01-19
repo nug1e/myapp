@@ -1,174 +1,26 @@
-#
-# nginx with php-fpm with lots of extensions base image build on Alpine Linux
-# 
+FROM alpine:latest
 
+RUN apk update \
+  && apk add --no-cache nginx php7-fpm php7-mcrypt \
+    php7-soap php7-openssl php7-gmp \
+    php7-pdo_odbc php7-json php7-dom \
+    php7-pdo php7-zip php7-mysqli \
+    php7-apcu php7-pdo_pgsql \
+    php7-bcmath php7-gd php7-odbc \
+    php7-pdo_mysql \
+    php7-gettext php7-xmlreader php7-xmlrpc \
+    php7-bz2 php7-iconv php7-pdo_dblib php7-curl php7-ctype \
+    libjpeg libjpeg-turbo libpng libpng-dev \
+    supervisor
 
-FROM php:7.0-fpm-alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY configure.sh /configure.sh
+COPY supervisord.conf /etc/supervisord.conf
 
-MAINTAINER Nugroho Andi Hastanto <slemania@gmail.com>
+VOLUME ["/var/lib/nginx/html/"]
 
-#
-# --------------------------------------------------------------------------
-# Install PHP-FPM
-# --------------------------------------------------------------------------
-#
-RUN apk update && \
-    apk add \
-        gcc \
-        g++ \
-        git \
-        re2c \
-        curl \
-        make \
-        libtool \
-        libmagic \
-        autoconf \
-        zlib-dev \
-        file-dev \
-        freetds-dev \
-        freetype-dev \
-        curl-dev \
-        krb5-dev \
-        libexif-dev \
-        libxslt-dev \
-        poppler-utils \
-        openssl-dev \
-        libpq \
-        libltdl \
-        libjpeg \
-        libpng-dev \
-        libxpm-dev \
-        libvpx-dev \
-        libxml2-dev \
-        libwebp-dev \
-        libssh2-dev \
-        libjpeg-turbo-dev \
-        icu-dev
+EXPOSE 80/tcp
 
-RUN docker-php-ext-configure hash && \
-    docker-php-ext-configure gd \
-        --enable-gd-native-ttf \
-        --with-vpx-dir=/usr/lib \
-        --with-xpm-dir=/usr/lib \
-        --with-webp-dir=/usr/lib \
-        --with-jpeg-dir=/usr/lib \
-        --with-freetype-dir=/usr/include/freetype2 && \
-    docker-php-ext-install gd && \
-    docker-php-ext-configure intl && \
-    docker-php-ext-install intl
+RUN sh /configure.sh
 
-#
-# --------------------------------------------------------------------------
-# Compile Nginx
-# --------------------------------------------------------------------------
-#
-
-ARG NGINX_VERSION=1.13.2
-ARG LIBPNG_VERSION=1.2.57
-ARG MAKE_J=4
-
-ENV NGINX_VERSION=${NGINX_VERSION} \
-    LIBPNG_VERSION=${LIBPNG_VERSION} \
-    MAKE_J=${MAKE_J}
-
-RUN apk upgrade --no-cache --update && \
-    apk add --no-cache --update \
-        bash \
-        ca-certificates \
-        libuuid \
-        apr \
-        apr-util \
-        libjpeg-turbo \
-        openssl
-
-RUN set -x && \
-    apk --no-cache add -t .build-deps \
-        apache2-dev \
-        apr-dev \
-        apr-util-dev \
-        build-base \
-        curl \
-        git \
-        libjpeg-turbo-dev \
-        linux-headers \
-        openssl-dev
-
-# Build libpng
-RUN cd /tmp && \
-    curl -L http://prdownloads.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz | tar -zx && \
-    cd /tmp/libpng-${LIBPNG_VERSION} && \
-    ./configure --build=$CBUILD --host=$CHOST --prefix=/usr --enable-shared --with-libpng-compat && \
-    make -j${MAKE_J} install V=0 
-
-# Build in additional Nginx modules
-RUN cd /tmp && \
-    git clone https://github.com/vozlt/nginx-module-vts.git && \
-    git clone https://github.com/openresty/headers-more-nginx-module.git && \
-    git clone https://github.com/yaoweibin/ngx_http_substitutions_filter_module.git
-
-# Clean-up
-RUN cd && \
-    # Forward request and error logs to docker log collector
-    ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log && \
-
-#
-# --------------------------------------------------------------------------
-# PHP-FPM Final Touches
-# --------------------------------------------------------------------------
-#
-
-# composer
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
-
-# Set default work directory
-ADD ./php-fpm/config/*.ini  /usr/local/etc/php/conf.d/
-ADD ./php-fpm/config/*.conf /usr/local/etc/php-fpm.d/
-
-# create PHP user
-RUN addgroup php-fpm -g 1000 && \
-    adduser -h /usr/share/php -u 1000 -G php-fpm -D -s /bin/false php-fpm
-
-# remove access log for health check
-RUN sed -i '/^access.log/ d' /usr/local/etc/php-fpm.d/docker.conf
-
-
-
-#
-# --------------------------------------------------------------------------
-# Nginx Final Touches
-# --------------------------------------------------------------------------
-#
-
-# Inject Nginx configuration files
-ADD ./nginx/conf.d /etc/nginx/conf.d
-ADD ./nginx/include /etc/nginx/include
-ADD ./nginx/nginx.conf /etc/nginx/nginx.conf
-ADD ./nginx/fastcgi_params /etc/nginx/fastcgi_params
-ADD ./docker-entrypoint.sh /usr/local/bin/
-
-RUN echo "<?php phpinfo();" > /etc/nginx/html/info.php
-RUN chmod +x /usr/local/bin/*
-
-
-# Removing build dependencies, clean temporary files
-RUN apk del .build-deps && \
-    docker-php-source delete && \
-    rm -rf /var/cache/apk/* /var/tmp/* /tmp/* 
-
-
-
-#
-# --------------------------------------------------------------------------
-# Touchdown!
-# --------------------------------------------------------------------------
-#
-
-EXPOSE 80
-EXPOSE 8080
-
-# check if response header returns 200 code OR die
-HEALTHCHECK --interval=5s --timeout=5s CMD [ "200" = "$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1/healthcheck)" ] || exit 1
-
-CMD ["nginx", "-g", "daemon off;"]
-ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
