@@ -120,11 +120,7 @@ RUN apk upgrade --no-cache --update && \
         apr \
         apr-util \
         libjpeg-turbo \
-        icu \
-        icu-libs \
-        openssl \
-        pcre \
-        zlib
+        openssl
 
 RUN set -x && \
     apk --no-cache add -t .build-deps \
@@ -134,15 +130,9 @@ RUN set -x && \
         build-base \
         curl \
         git \
-        icu-dev \
-        geoip-dev \
         libjpeg-turbo-dev \
         linux-headers \
-        gperf \
-        openssl-dev \
-        pcre-dev \
-        python \
-        zlib-dev
+        openssl-dev
 
 # Build libpng
 RUN cd /tmp && \
