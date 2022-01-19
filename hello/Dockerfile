@@ -23,29 +23,16 @@ RUN apk update && \
         libtool \
         libmagic \
         autoconf \
-        icu-dev \
         zlib-dev \
         file-dev \
         freetds-dev \
         freetype-dev \
-        gmp-dev \
         curl-dev \
         krb5-dev \
-        imap-dev \
-        bzip2-dev \
-        erlang-dev \
-        sqlite-dev \
-        ghostscript \
         libexif-dev \
         libxslt-dev \
         poppler-utils \
         openssl-dev \
-        openldap-dev \
-        enchant-dev \
-        unixodbc-dev \
-        cyrus-sasl-dev \
-        postgresql-dev \
-        imagemagick-dev \
         libpq \
         libltdl \
         libjpeg \
@@ -55,8 +42,6 @@ RUN apk update && \
         libxml2-dev \
         libwebp-dev \
         libssh2-dev \
-        libmcrypt-dev \
-        libmemcached-dev \
         libjpeg-turbo-dev
 
 RUN docker-php-ext-configure hash && \
