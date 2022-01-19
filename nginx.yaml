@@ -44,3 +44,6 @@ spec:
       volumeMounts:
         - name: shared-files
           mountPath: /var/www/html
+    - env:
+      image: 282835178041.dkr.ecr.eu-west-3.amazonaws.com/hello
+      image_tag: dev 
