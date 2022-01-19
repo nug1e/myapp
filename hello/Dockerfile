@@ -56,12 +56,9 @@ RUN docker-php-ext-configure hash && \
     docker-php-ext-install gd && \
     docker-php-ext-configure intl && \
     docker-php-ext-install intl
-    
+
 # Install bcmath, mbstring and zip extensions
 RUN docker-php-ext-install bcmath mbstring zip wddx shmop sockets
-
-# Enable Exif PHP extentions requirements
-RUN docker-php-ext-install exif gettext
 
 # curl extension
 RUN docker-php-ext-install curl
