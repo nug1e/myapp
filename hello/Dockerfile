@@ -1,10 +1,6 @@
 #
-# nginx + pagespeed + substitutions + vhosts VTS + more headers + geoip 
-# with php-fpm with lots of extensions base image build on Alpine Linux
+# nginx with php-fpm with lots of extensions base image build on Alpine Linux
 # 
-# credits: 
-# - https://github.com/lagun4ik/docker-nginx-pagespeed
-#
 
 
 FROM php:7.0-fpm-alpine
