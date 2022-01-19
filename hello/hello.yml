@@ -15,7 +15,7 @@ spec:
         app: hello
     spec:
       containers:
-      - image: gregbkr/hello
+      - image: nugie/nginx-php-fpm7
         imagePullPolicy: Always
         name: hello
         ports:
@@ -38,7 +38,7 @@ metadata:
   name: hello
 spec:
   rules:
-    - host: '*.satoshi.tech'
+    - host: '*.slemania.my.id'
       http:
         paths:
           - backend:
