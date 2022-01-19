@@ -43,7 +43,10 @@ RUN apk update && \
         libwebp-dev \
         libssh2-dev \
         libjpeg-turbo-dev \
-        icu-dev
+        icu-dev \
+        ldb-dev \
+        libldap \
+        openldap-dev
 
 RUN docker-php-ext-configure hash && \
     docker-php-ext-configure gd \
