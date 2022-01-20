@@ -15,7 +15,7 @@ spec:
         app: hello
     spec:
       containers:
-      - image: nugie/nginx-php-fpm7:v01
+      - image: nugie/hello-nugie
         imagePullPolicy: Always
         name: hello
         ports:
