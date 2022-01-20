@@ -1,4 +1,4 @@
-# MyApp: HA container in EKS (AWS managed kubernetes)
+# MyApp: Build simple container in EKS (AWS managed kubernetes)
 
 ## Overview
 
