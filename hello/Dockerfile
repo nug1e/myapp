@@ -19,7 +19,7 @@ COPY supervisord.conf /etc/supervisord.conf
 
 VOLUME ["/var/lib/nginx/html/"]
 
-EXPOSE 80/tcp
+EXPOSE 8080/tcp
 
 RUN sh /configure.sh
 
