@@ -32,16 +32,21 @@ spec:
     - port: 8080
   #type: LoadBalancer
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hello
+  name: hello-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-    - host: '*.slemania.my.id'
+    - host: slemania.my.id
       http:
         paths:
-          - backend:
-              serviceName: hello
-              servicePort: 8080
-            path: /
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080
